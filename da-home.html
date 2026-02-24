@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&A - One-Stop Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            overflow-x: hidden;
+        }
+        
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            z-index: -2;
+        }
+        
+        .gradient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #d4af37 0%, transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #f4e4c1 0%, transparent 70%);
+            bottom: -50px;
+            right: -50px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        
+        /* Hero Section Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.3),
+                           0 0 40px rgba(212, 175, 55, 0.2),
+                           0 0 60px rgba(212, 175, 55, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(212, 175, 55, 0.5),
+                           0 0 50px rgba(212, 175, 55, 0.3),
+                           0 0 70px rgba(212, 175, 55, 0.2);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 1.5s ease-out forwards;
+        }
+        
+        .fade-in {
+            animation: fadeIn 2s ease-out forwards;
+        }
+        
+        .delay-200 { animation-delay: 0.2s; opacity: 0; }
+        .delay-400 { animation-delay: 0.4s; opacity: 0; }
+        .delay-600 { animation-delay: 0.6s; opacity: 0; }
+        .delay-800 { animation-delay: 0.8s; opacity: 0; }
+        
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.8) 0%, rgba(212, 175, 55, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        @keyframes float-particle {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+        
+        /* Timeline Styles */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.1) 100%);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            width: calc(50% - 2rem);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: auto;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            width: 20px;
+            height: 20px;
+            background: #d4af37;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        
+        .timeline-date {
+            color: #d4af37;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Button Styles */
+        .cta-button {
+            background: transparent;
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            padding: 12px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: glow 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cta-button:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            text-decoration: none;
+            color: #d4af37;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Icon Container */
+        .icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover .icon-container {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .icon-ramadan {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+        }
+        
+        .icon-health {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .icon-wealth {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 3rem);
+                margin-left: 3rem !important;
+            }
+            
+            .timeline-dot {
+                left: 20px;
+            }
+            
+            .glass-card {
+                padding: 1.5rem;
+            }
+            
+            .icon-container {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .cta-button {
+                padding: 10px 24px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative z-10">
+        <div class="text-center px-4">
+            <!-- D&A Logo -->
+            <h1 class="serif-font text-6xl md:text-8xl lg:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 mb-4 fade-in">
+                D&A
+            </h1>
+            
+            <!-- Names -->
+            <h2 class="text-xl md:text-2xl lg:text-3xl text-gray-300 mb-6 fade-in-up delay-200">
+                Diana & Aman
+            </h2>
+            
+            <!-- Tagline -->
+            <p class="text-gray-400 text-sm md:text-base lg:text-lg mb-8 fade-in-up delay-400 italic">
+                "Building our future together, one day at a time."
+            </p>
+            
+            <!-- Navigation Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in-up delay-600">
+                <button class="cta-button" onclick="scrollToStory()">
+                    <i data-lucide="heart" class="w-4 h-4"></i>
+                    Our Story
+                </button>
+                <button class="cta-button" onclick="scrollToDashboard()">
+                    <i data-lucide="grid-3x3" class="w-4 h-4"></i>
+                    Dashboard
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Our Story Section -->
+    <section id="our-story" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="serif-font text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 mb-16">
+                Our Story
+            </h2>
+            
+            <div class="timeline">
+                <!-- December: PCPM BI Meeting -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Desember 2024</div>
+                        <h3 class="text-xl font-semibold text-white mb-2">The Beginning at PCPM BI</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Kami bertemu saat tes PCPM BI. Diana (Alumni UI Ekonomi) dan Aman (Alumni IT) - dua jiwa dari dunia berbeda yang dipertemukan oleh takdir. Diana menjadi supporter paling kencang saat Aman jadi moderator.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- January: Purwokerto Visit -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Januari 2025</div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Aman's Journey to Purwokerto</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Aman menempuh jarak jauh untuk menyambangi Diana di Purwokerto. Perjalanan yang membawa kami semakin dekat, dan mengukir awal dari sesuatu yang istimewa.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- The Challenge -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Mid-Januari 2025</div>
+                        <h3 class="text-xl font-semibold text-white mb-2">The Challenge</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Diana menantang Aman untuk membuat proposal pengajuan jadian. Sebuah tantangan yang unik dan romantis - bukti bahwa cinta kami dimulai dengan keseriusan.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- January 18: The Proposal -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">18 Januari 2025</div>
+                        <h3 class="text-xl font-semibold text-white mb-2">The Approved Proposal</h3>
+                        <p class="text-gray-400 leading-relaxed mb-4">
+                            Aman melakukan presentasi proposal dan kami resmi jadian! Hari yang mengubah segalanya, hari dimana kami memutuskan untuk memulai perjalanan bersama.
+                        </p>
+                        <a href="https://www.canva.com/design/DAG9afwd4TE/6WfAEhJAtgF-87om_Je3ww/view?utm_content=DAG9afwd4TE&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hc4c86c76f5" target="_blank" class="cta-button">
+                            <i data-lucide="file-text" class="w-4 h-4"></i>
+                            View Approved Proposal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="serif-font text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 mb-16">
+                Our Dashboard
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Ramadan Kareem Card -->
+                <div class="glass-card fade-in-up delay-200" onclick="openLink('https://docs.google.com/spreadsheets/d/1uoYuktUAzOShsOzgUIJ59-pRu814RjlW/edit?usp=drive_link&ouid=101326731190925663342&rtpof=true&sd=true')">
+                    <div class="icon-container icon-ramadan">
+                        <i data-lucide="moon" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-semibold text-white mb-3">
+                        Ramadan Kareem
+                    </h3>
+                    <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+                        Logging our spiritual journey together.
+                    </p>
+                    <div class="mt-4 flex items-center text-yellow-400 text-sm">
+                        <span>Open Spreadsheet</span>
+                        <i data-lucide="external-link" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+                
+                <!-- Stay Healthy Card -->
+                <div class="glass-card fade-in-up delay-400" onclick="openLink('https://docs.google.com/spreadsheets/d/1AkRPKP5KT6l-F1_AApRjoKhz_bp5FZYuGkgWjbvtc7s/edit?usp=drive_link')">
+                    <div class="icon-container icon-health">
+                        <i data-lucide="heart" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-semibold text-white mb-3">
+                        Stay Healthy
+                    </h3>
+                    <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+                        Tracking our wellness and fitness goals.
+                    </p>
+                    <div class="mt-4 flex items-center text-green-400 text-sm">
+                        <span>Open Spreadsheet</span>
+                        <i data-lucide="external-link" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+                
+                <!-- Stay Wealthy Card -->
+                <div class="glass-card fade-in-up delay-600" onclick="openLink('https://docs.google.com/spreadsheets/d/1j_36i5KjWCOTvq5OjMT83nSZITElIyQGYj3fcSUGDMo/edit?usp=drive_link')">
+                    <div class="icon-container icon-wealth">
+                        <i data-lucide="trending-up" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-semibold text-white mb-3">
+                        Stay Wealthy
+                    </h3>
+                    <p class="text-gray-400 text-sm md:text-base leading-relaxed">
+                        Managing our shared growth and prosperity.
+                    </p>
+                    <div class="mt-4 flex items-center text-blue-400 text-sm">
+                        <span>Open Spreadsheet</span>
+                        <i data-lucide="external-link" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm md:text-base">
+                Building our future since <span class="text-yellow-400 font-semibold">January 18th, 2025</span> 💕
+            </p>
+            <p class="text-gray-500 text-xs mt-2">
+                Made with ❤️ by D&A
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 1;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 10;
+                particle.style.animation = `float-particle ${duration}s ${delay}s infinite ease-in-out`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Navigation functions
+        function scrollToStory() {
+            document.getElementById('our-story').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function scrollToDashboard() {
+            document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function openLink(url) {
+            window.open(url, '_blank');
+        }
+        
+        // Timeline animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            observer.observe(item);
+        });
+        
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', function(e) {
+            const orbs = document.querySelectorAll('.gradient-orb');
+            const particles = document.querySelector('.particles');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 10;
+                orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+            
+            if (particles) {
+                particles.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+            }
+        });
+        
+        // Initialize particles on load
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+        });
+    </script>
+</body>
+</html>
