@@ -308,6 +308,137 @@
             transform: scale(1.1) rotate(5deg);
         }
         
+        /* Audio Player Styles */
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 15px 20px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            min-width: 300px;
+        }
+        
+        .audio-player:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+        
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .play-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .audio-info {
+            flex: 1;
+        }
+        
+        .song-title {
+            color: #d4af37;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .artist-name {
+            color: #999;
+            font-size: 10px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37 0%, #f4e4c1 100%);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .volume-slider {
+            width: 60px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .volume-level {
+            height: 100%;
+            background: #d4af37;
+            width: 70%;
+            border-radius: 3px;
+        }
+        
+        .minimize-btn {
+            background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #d4af37;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .minimize-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .audio-player.minimized {
+            min-width: auto;
+            padding: 10px;
+        }
+        
+        .audio-player.minimized .audio-info,
+        .audio-player.minimized .progress-bar,
+        .audio-player.minimized .volume-control {
+            display: none;
+        }
+        
         .icon-ramadan {
             background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
         }
@@ -531,9 +662,105 @@
         </div>
     </footer>
     
+    <!-- Audio Player -->
+    <div class="audio-player" id="audioPlayer">
+        <div class="audio-controls">
+            <button class="play-btn" id="playBtn" onclick="togglePlay()">
+                <i data-lucide="play" class="w-4 h-4 text-white" id="playIcon"></i>
+            </button>
+            
+            <div class="audio-info">
+                <div class="song-title">Menikahimu</div>
+                <div class="artist-name">Kahitna</div>
+                <div class="progress-bar" onclick="seekAudio(event)">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+            
+            <div class="volume-control">
+                <i data-lucide="volume-2" class="w-4 h-4 text-gray-400"></i>
+                <div class="volume-slider" onclick="setVolume(event)">
+                    <div class="volume-level" id="volumeLevel"></div>
+                </div>
+            </div>
+            
+            <button class="minimize-btn" onclick="toggleMinimize()">
+                <i data-lucide="minus" class="w-3 h-3" id="minimizeIcon"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Hidden Audio Element -->
+    <audio id="audioElement" preload="auto">
+        <source src="Kahitna - Menikahimu - Lyrics.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
+        
+        // Audio Player Variables
+        let audio = document.getElementById('audioElement');
+        let playBtn = document.getElementById('playBtn');
+        let playIcon = document.getElementById('playIcon');
+        let progress = document.getElementById('progress');
+        let volumeLevel = document.getElementById('volumeLevel');
+        let audioPlayer = document.getElementById('audioPlayer');
+        let isPlaying = false;
+        
+        // Audio Player Functions
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+                playIcon.setAttribute('data-lucide', 'play');
+            } else {
+                audio.play();
+                playIcon.setAttribute('data-lucide', 'pause');
+            }
+            isPlaying = !isPlaying;
+            lucide.createIcons();
+        }
+        
+        function toggleMinimize() {
+            audioPlayer.classList.toggle('minimized');
+        }
+        
+        function seekAudio(event) {
+            const progressBar = event.currentTarget;
+            const clickX = event.offsetX;
+            const width = progressBar.offsetWidth;
+            const duration = audio.duration;
+            audio.currentTime = (clickX / width) * duration;
+        }
+        
+        function setVolume(event) {
+            const volumeSlider = event.currentTarget;
+            const clickX = event.offsetX;
+            const width = volumeSlider.offsetWidth;
+            const volume = clickX / width;
+            audio.volume = volume;
+            volumeLevel.style.width = (volume * 100) + '%';
+        }
+        
+        // Update progress bar
+        audio.addEventListener('timeupdate', function() {
+            if (audio.duration) {
+                const progressPercent = (audio.currentTime / audio.duration) * 100;
+                progress.style.width = progressPercent + '%';
+            }
+        });
+        
+        // Reset when song ends
+        audio.addEventListener('ended', function() {
+            isPlaying = false;
+            playIcon.setAttribute('data-lucide', 'play');
+            progress.style.width = '0%';
+            lucide.createIcons();
+        });
+        
+        // Set initial volume
+        audio.volume = 0.7;
         
         // Create floating particles
         function createParticles() {
